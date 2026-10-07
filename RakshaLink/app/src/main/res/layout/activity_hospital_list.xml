@@ -13,30 +13,53 @@
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#C62828"
+        android:layout_marginBottom="4dp"/>
+
+    <!-- Persistent Baseline Reference Note -->
+    <TextView
+        android:id="@+id/tvDefaultReference"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📍 GPS: Standard Mumbai Center Reference"
+        android:textSize="12sp"
+        android:textColor="#616161"
+        android:layout_marginBottom="2dp"/>
+
+    <!-- Live Dynamic GPS Fetching/Active Status -->
+    <TextView
+        android:id="@+id/tvLocationStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⏳ Fetching live phone location..."
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:textColor="#E65100"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Search by Area / Name -->
+    <!-- Search Input -->
     <EditText
         android:id="@+id/etSearchArea"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search by Area (e.g., Parel, Bandra, Thane)"
+        android:hint="Search by Area (e.g. Bandra, Parel, Thane)"
+        android:textColorHint="#616161"
+        android:textColor="#000000"
         android:inputType="text"
         android:background="#FFFFFF"
         android:padding="12dp"
         android:layout_marginBottom="10dp"/>
 
-    <!-- ICU Filter Checkbox -->
+    <!-- ICU Toggle -->
     <CheckBox
         android:id="@+id/cbIcuOnly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Show 24/7 ICU Facilities Only"
         android:textSize="14sp"
-        android:textColor="#333333"
+        android:textColor="#212121"
         android:layout_marginBottom="12dp"/>
 
-    <!-- Dynamic Container for Hospital Cards -->
+    <!-- Dynamic Container for Cards -->
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

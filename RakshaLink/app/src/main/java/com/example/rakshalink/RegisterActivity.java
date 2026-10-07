@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private EditText etName, etPhone, etEmail, etPassword;
+    private EditText etName, etPhone, etEmail, etPassword, etConfirmPassword;
     private Button btnRegister;
     private TextView tvGoToLogin;
     private DatabaseHelper dbHelper;
@@ -27,6 +27,7 @@ public class RegisterActivity extends AppCompatActivity {
         etPhone = findViewById(R.id.etRegPhone);
         etEmail = findViewById(R.id.etRegEmail);
         etPassword = findViewById(R.id.etRegPassword);
+        etConfirmPassword = findViewById(R.id.etRegConfirmPassword);
         btnRegister = findViewById(R.id.btnRegister);
         tvGoToLogin = findViewById(R.id.tvGoToLogin);
 
@@ -39,6 +40,7 @@ public class RegisterActivity extends AppCompatActivity {
         String phone = etPhone.getText().toString().trim();
         String email = etEmail.getText().toString().trim();
         String password = etPassword.getText().toString().trim();
+        String confirmPassword = etConfirmPassword.getText().toString().trim();
 
         if (TextUtils.isEmpty(name)) {
             etName.setError("Name is required");
@@ -64,13 +66,24 @@ public class RegisterActivity extends AppCompatActivity {
             return;
         }
 
+        if (TextUtils.isEmpty(confirmPassword)) {
+            etConfirmPassword.setError("Please confirm your password");
+            etConfirmPassword.requestFocus();
+            return;
+        }
+
+        if (!password.equals(confirmPassword)) {
+            etConfirmPassword.setError("Passwords do not match");
+            etConfirmPassword.requestFocus();
+            return;
+        }
+
         if (dbHelper.checkEmailExists(email)) {
             etEmail.setError("Email is already registered! Please Login.");
             etEmail.requestFocus();
             return;
         }
 
-        // Hardcoded strictly to "User". Admin accounts cannot be created here.
         boolean success = dbHelper.registerUser(name, email, phone, password, "User");
         if (success) {
             Toast.makeText(this, "Registration Successful! Please login.", Toast.LENGTH_LONG).show();

@@ -3,14 +3,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    android:background="#F8F9FA">
+    android:background="#EDEDED">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:padding="24dp"
-        android:gravity="center_horizontal">
+        android:gravity="center">
 
         <TextView
             android:layout_width="wrap_content"
@@ -19,24 +19,27 @@
             android:textSize="26sp"
             android:textStyle="bold"
             android:textColor="#C62828"
-            android:layout_marginTop="16dp"
             android:layout_marginBottom="4dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Sign up for emergency assistance and hospital locator"
-            android:textSize="13sp"
-            android:textColor="#666666"
-            android:layout_marginBottom="28dp"/>
+            android:textSize="14sp"
+            android:textColor="#333333"
+            android:layout_marginBottom="24dp"
+            android:gravity="center"/>
 
         <EditText
             android:id="@+id/etRegName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Full Name"
+            android:textColorHint="#555555"
+            android:textColor="#000000"
+            android:background="#FFFFFF"
             android:inputType="textPersonName"
-            android:padding="12dp"
+            android:padding="14dp"
             android:layout_marginBottom="12dp"/>
 
         <EditText
@@ -44,8 +47,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Phone Number (10 digits)"
+            android:textColorHint="#555555"
+            android:textColor="#000000"
+            android:background="#FFFFFF"
             android:inputType="phone"
-            android:padding="12dp"
+            android:padding="14dp"
             android:layout_marginBottom="12dp"/>
 
         <EditText
@@ -53,8 +59,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Email Address"
+            android:textColorHint="#555555"
+            android:textColor="#000000"
+            android:background="#FFFFFF"
             android:inputType="textEmailAddress"
-            android:padding="12dp"
+            android:padding="14dp"
             android:layout_marginBottom="12dp"/>
 
         <EditText
@@ -62,8 +71,23 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Password (min 6 characters)"
+            android:textColorHint="#555555"
+            android:textColor="#000000"
+            android:background="#FFFFFF"
             android:inputType="textPassword"
-            android:padding="12dp"
+            android:padding="14dp"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etRegConfirmPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Confirm Password"
+            android:textColorHint="#555555"
+            android:textColor="#000000"
+            android:background="#FFFFFF"
+            android:inputType="textPassword"
+            android:padding="14dp"
             android:layout_marginBottom="24dp"/>
 
         <Button
@@ -83,6 +107,7 @@
             android:layout_height="wrap_content"
             android:text="Already have an account? Login here"
             android:textColor="#C62828"
+            android:textStyle="bold"
             android:textSize="14sp"
             android:padding="8dp"/>
     </LinearLayout>

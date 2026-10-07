@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:padding="24dp"
     android:gravity="center"
-    android:background="#F8F9FA">
+    android:background="#EDEDED">
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,8 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mumbai Emergency &amp; Hospital Locator"
-        android:textSize="13sp"
-        android:textColor="#555555"
+        android:textSize="14sp"
+        android:textColor="#333333"
         android:layout_marginBottom="32dp"/>
 
     <EditText
@@ -29,8 +29,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email Address"
+        android:textColorHint="#555555"
+        android:textColor="#000000"
+        android:background="#FFFFFF"
         android:inputType="textEmailAddress"
-        android:padding="12dp"
+        android:padding="14dp"
         android:layout_marginBottom="12dp"/>
 
     <EditText
@@ -38,8 +41,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Password"
+        android:textColorHint="#555555"
+        android:textColor="#000000"
+        android:background="#FFFFFF"
         android:inputType="textPassword"
-        android:padding="12dp"
+        android:padding="14dp"
         android:layout_marginBottom="16dp"/>
 
     <CheckBox
@@ -47,6 +53,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Keep me signed in"
+        android:textColor="#212121"
         android:checked="true"
         android:layout_marginBottom="20dp"/>
 
@@ -67,6 +74,7 @@
         android:layout_height="wrap_content"
         android:text="New to RakshaLink? Register here"
         android:textColor="#C62828"
+        android:textStyle="bold"
         android:textSize="14sp"
         android:padding="8dp"/>
 </LinearLayout>

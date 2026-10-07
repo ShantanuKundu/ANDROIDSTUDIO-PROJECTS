@@ -2,32 +2,32 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
+    android:background="#F0F0F0"
     android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp"
-        android:gravity="center_horizontal">
+        android:padding="24dp"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/tvUserWelcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Welcome!"
-            android:textSize="20sp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            android:textColor="#212121"
-            android:layout_marginTop="8dp"/>
+            android:textColor="#111111"
+            android:layout_marginBottom="4dp"/>
 
         <TextView
             android:id="@+id/tvUserRoleBadge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Role: User"
-            android:textSize="12sp"
+            android:text="Role: USER"
+            android:textSize="13sp"
             android:textColor="#C62828"
             android:textStyle="bold"
             android:layout_marginBottom="4dp"/>
@@ -37,15 +37,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Active Mumbai Hospitals: 50"
-            android:textSize="13sp"
+            android:textSize="14sp"
             android:textColor="#2E7D32"
-            android:layout_marginBottom="20dp"/>
+            android:textStyle="bold"
+            android:layout_marginBottom="28dp"/>
 
         <!-- SOS Emergency Button -->
         <Button
             android:id="@+id/btnSos"
-            android:layout_width="160dp"
-            android:layout_height="160dp"
+            android:layout_width="180dp"
+            android:layout_height="180dp"
             android:text="EMERGENCY\nSOS (108)"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -56,10 +57,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tap to dial Mumbai Emergency Helpline (108)"
-            android:textSize="11sp"
-            android:textColor="#757575"
-            android:layout_marginBottom="24dp"/>
+            android:text="Tap to dial Mumbai Emergency Ambulance"
+            android:textSize="12sp"
+            android:textColor="#555555"
+            android:layout_marginBottom="28dp"/>
 
         <!-- Hospital Directory Button -->
         <Button
@@ -91,8 +92,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Logout"
-            android:backgroundTint="#616161"
+            android:backgroundTint="#424242"
             android:textColor="#FFFFFF"
+            android:padding="12dp"
             android:layout_marginTop="8dp"/>
     </LinearLayout>
 </ScrollView>
