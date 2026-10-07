@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:text="Keep me signed in"
         android:checked="true"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="20dp"/>
 
     <Button
         android:id="@+id/btnLogin"
@@ -58,5 +58,15 @@
         android:textSize="16sp"
         android:backgroundTint="#C62828"
         android:textColor="#FFFFFF"
-        android:padding="12dp"/>
+        android:padding="12dp"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:id="@+id/tvGoToRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New to RakshaLink? Register here"
+        android:textColor="#C62828"
+        android:textSize="14sp"
+        android:padding="8dp"/>
 </LinearLayout>

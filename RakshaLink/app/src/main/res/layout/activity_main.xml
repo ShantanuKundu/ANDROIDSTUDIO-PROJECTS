@@ -1,56 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20dp"
-    android:gravity="center_horizontal"
-    android:background="#FAFAFA">
+    android:background="#FAFAFA"
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/tvUserWelcome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Welcome!"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:textColor="#212121"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="6dp"/>
-
-    <TextView
-        android:id="@+id/tvDatabaseStatus"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Connecting to Mumbai Database..."
-        android:textSize="14sp"
-        android:textColor="#2E7D32"
-        android:layout_marginBottom="32dp"/>
-
-    <Button
-        android:id="@+id/btnSos"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
-        android:text="EMERGENCY\nSOS (108)"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:backgroundTint="#C62828"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tap to dial Mumbai Emergency Ambulance"
-        android:textSize="12sp"
-        android:textColor="#757575"
-        android:layout_marginBottom="40dp"/>
-
-    <Button
-        android:id="@+id/btnLogout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Logout"
-        android:backgroundTint="#616161"
-        android:textColor="#FFFFFF"/>
-</LinearLayout>
+        android:orientation="vertical"
+        android:padding="20dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/tvUserWelcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Welcome!"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#212121"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/tvUserRoleBadge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Role: User"
+            android:textSize="12sp"
+            android:textColor="#C62828"
+            android:textStyle="bold"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:id="@+id/tvDatabaseStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Active Mumbai Hospitals: 50"
+            android:textSize="13sp"
+            android:textColor="#2E7D32"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- SOS Emergency Button -->
+        <Button
+            android:id="@+id/btnSos"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:text="EMERGENCY\nSOS (108)"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#C62828"
+            android:layout_marginBottom="8dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tap to dial Mumbai Emergency Helpline (108)"
+            android:textSize="11sp"
+            android:textColor="#757575"
+            android:layout_marginBottom="24dp"/>
+
+        <!-- Hospital Directory Button -->
+        <Button
+            android:id="@+id/btnFindHospitals"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🏥  Find &amp; Locate Hospitals"
+            android:textSize="15sp"
+            android:backgroundTint="#1976D2"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <!-- Admin Only Management Button -->
+        <Button
+            android:id="@+id/btnAdminManage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="⚙️  Admin: Manage Hospital Database"
+            android:textSize="15sp"
+            android:backgroundTint="#F57C00"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:visibility="gone"
+            android:layout_marginBottom="12dp"/>
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Logout"
+            android:backgroundTint="#616161"
+            android:textColor="#FFFFFF"
+            android:layout_marginTop="8dp"/>
+    </LinearLayout>
+</ScrollView>

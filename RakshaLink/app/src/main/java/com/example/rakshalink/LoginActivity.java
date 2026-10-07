@@ -7,6 +7,7 @@ import android.util.Patterns;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,13 +16,16 @@ public class LoginActivity extends AppCompatActivity {
     private EditText etEmail, etPassword;
     private CheckBox cbRememberMe;
     private Button btnLogin;
+    private TextView tvGoToRegister;
     private SessionManager sessionManager;
+    private DatabaseHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         sessionManager = new SessionManager(this);
+        dbHelper = new DatabaseHelper(this);
 
         if (sessionManager.isLoggedIn()) {
             startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -35,8 +39,10 @@ public class LoginActivity extends AppCompatActivity {
         etPassword = findViewById(R.id.etPassword);
         cbRememberMe = findViewById(R.id.cbRememberMe);
         btnLogin = findViewById(R.id.btnLogin);
+        tvGoToRegister = findViewById(R.id.tvGoToRegister);
 
         btnLogin.setOnClickListener(v -> handleLogin());
+        tvGoToRegister.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, RegisterActivity.class)));
     }
 
     private void handleLogin() {
@@ -49,20 +55,25 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        if (TextUtils.isEmpty(password) || password.length() < 6) {
-            etPassword.setError("Password must have at least 6 characters");
+        if (TextUtils.isEmpty(password)) {
+            etPassword.setError("Please enter your password");
             etPassword.requestFocus();
             return;
         }
 
-        if (cbRememberMe.isChecked()) {
-            sessionManager.createLoginSession(email);
+        // Authenticate via SQLite database
+        String role = dbHelper.authenticateUser(email, password);
+
+        if (role != null) {
+            String userName = dbHelper.getUserName(email);
+            if (cbRememberMe.isChecked()) {
+                sessionManager.createLoginSession(email, userName, role);
+            }
+            Toast.makeText(this, "Welcome " + userName + " (" + role + ")", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+            finish();
+        } else {
+            Toast.makeText(this, "Invalid Email or Password. Please register first.", Toast.LENGTH_LONG).show();
         }
-
-        Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show();
-
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
     }
 }

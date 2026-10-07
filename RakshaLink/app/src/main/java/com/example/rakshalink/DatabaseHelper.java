@@ -9,8 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "RakshaLink.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2; // Incremented version to add users table
 
+    // Table: Hospitals
     public static final String TABLE_HOSPITALS = "hospitals";
     public static final String COL_ID = "id";
     public static final String COL_NAME = "name";
@@ -20,13 +21,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COL_RATING = "rating";
     public static final String COL_DISTANCE = "distance_km";
 
+    // Table: Users
+    public static final String TABLE_USERS = "users";
+    public static final String COL_U_ID = "user_id";
+    public static final String COL_U_NAME = "full_name";
+    public static final String COL_U_EMAIL = "email";
+    public static final String COL_U_PHONE = "phone";
+    public static final String COL_U_PASSWORD = "password";
+    public static final String COL_U_ROLE = "role"; // "User" or "Admin"
+
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createTable = "CREATE TABLE " + TABLE_HOSPITALS + " ("
+        // Create Hospitals Table
+        String createHospitals = "CREATE TABLE " + TABLE_HOSPITALS + " ("
                 + COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
                 + COL_NAME + " TEXT NOT NULL, "
                 + COL_AREA + " TEXT NOT NULL, "
@@ -34,14 +45,125 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 + COL_ICU + " INTEGER DEFAULT 0, "
                 + COL_RATING + " REAL DEFAULT 0.0, "
                 + COL_DISTANCE + " REAL DEFAULT 0.0);";
-        db.execSQL(createTable);
+        db.execSQL(createHospitals);
+
+        // Create Users Table
+        String createUsers = "CREATE TABLE " + TABLE_USERS + " ("
+                + COL_U_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+                + COL_U_NAME + " TEXT NOT NULL, "
+                + COL_U_EMAIL + " TEXT UNIQUE NOT NULL, "
+                + COL_U_PHONE + " TEXT NOT NULL, "
+                + COL_U_PASSWORD + " TEXT NOT NULL, "
+                + COL_U_ROLE + " TEXT NOT NULL);";
+        db.execSQL(createUsers);
+
         seedFiftyMumbaiHospitals(db);
+        seedDefaultAccounts(db);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_HOSPITALS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         onCreate(db);
+    }
+
+    private void seedDefaultAccounts(SQLiteDatabase db) {
+        // Pre-create an admin and a user so you can log in immediately
+        registerUserInternal(db, "System Admin", "admin@rakshalink.com", "9820011223", "admin123", "Admin");
+        registerUserInternal(db, "Rahul Sharma", "rahul@gmail.com", "9876543210", "user123", "User");
+    }
+
+    private void registerUserInternal(SQLiteDatabase db, String name, String email, String phone, String password, String role) {
+        ContentValues cv = new ContentValues();
+        cv.put(COL_U_NAME, name);
+        cv.put(COL_U_EMAIL, email.toLowerCase().trim());
+        cv.put(COL_U_PHONE, phone);
+        cv.put(COL_U_PASSWORD, password);
+        cv.put(COL_U_ROLE, role);
+        db.insert(TABLE_USERS, null, cv);
+    }
+
+    // --- USER AUTHENTICATION METHODS ---
+
+    public boolean registerUser(String name, String email, String phone, String password, String role) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_U_NAME, name);
+        cv.put(COL_U_EMAIL, email.toLowerCase().trim());
+        cv.put(COL_U_PHONE, phone);
+        cv.put(COL_U_PASSWORD, password);
+        cv.put(COL_U_ROLE, role);
+
+        long result = db.insert(TABLE_USERS, null, cv);
+        return result != -1;
+    }
+
+    public boolean checkEmailExists(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_U_ID + " FROM " + TABLE_USERS + " WHERE " + COL_U_EMAIL + " = ?",
+                new String[]{email.toLowerCase().trim()});
+        boolean exists = cursor.getCount() > 0;
+        cursor.close();
+        return exists;
+    }
+
+    // Returns the role ("Admin" or "User") if password matches, or null if invalid
+    public String authenticateUser(String email, String password) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_U_ROLE + " FROM " + TABLE_USERS
+                        + " WHERE " + COL_U_EMAIL + " = ? AND " + COL_U_PASSWORD + " = ?",
+                new String[]{email.toLowerCase().trim(), password});
+
+        String role = null;
+        if (cursor.moveToFirst()) {
+            role = cursor.getString(0);
+        }
+        cursor.close();
+        return role;
+    }
+
+    public String getUserName(String email) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT " + COL_U_NAME + " FROM " + TABLE_USERS + " WHERE " + COL_U_EMAIL + " = ?",
+                new String[]{email.toLowerCase().trim()});
+        String name = "User";
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(0);
+        }
+        cursor.close();
+        return name;
+    }
+
+    // --- HOSPITAL METHODS ---
+
+    public int getHospitalCount() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_HOSPITALS, null);
+        int count = 0;
+        if (cursor.moveToFirst()) {
+            count = cursor.getInt(0);
+        }
+        cursor.close();
+        return count;
+    }
+
+    public Cursor getAllHospitals() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM " + TABLE_HOSPITALS + " ORDER BY " + COL_DISTANCE + " ASC", null);
+    }
+
+    public boolean insertHospital(String name, String area, String phone, int icu, float rating, double distance) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put(COL_NAME, name);
+        cv.put(COL_AREA, area);
+        cv.put(COL_PHONE, phone);
+        cv.put(COL_ICU, icu);
+        cv.put(COL_RATING, rating);
+        cv.put(COL_DISTANCE, distance);
+        long res = db.insert(TABLE_HOSPITALS, null, cv);
+        return res != -1;
     }
 
     private void seedFiftyMumbaiHospitals(SQLiteDatabase db) {
@@ -114,21 +236,5 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         } finally {
             db.endTransaction();
         }
-    }
-
-    public int getHospitalCount() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + TABLE_HOSPITALS, null);
-        int count = 0;
-        if (cursor.moveToFirst()) {
-            count = cursor.getInt(0);
-        }
-        cursor.close();
-        return count;
-    }
-
-    public Cursor getAllHospitals() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        return db.rawQuery("SELECT * FROM " + TABLE_HOSPITALS, null);
     }
 }

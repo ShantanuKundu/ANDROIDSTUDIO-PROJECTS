@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:background="#F8F9FA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Citizen Account"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            android:textColor="#C62828"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="4dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Sign up for emergency assistance and hospital locator"
+            android:textSize="13sp"
+            android:textColor="#666666"
+            android:layout_marginBottom="28dp"/>
+
+        <EditText
+            android:id="@+id/etRegName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Full Name"
+            android:inputType="textPersonName"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etRegPhone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone Number (10 digits)"
+            android:inputType="phone"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etRegEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:padding="12dp"
+            android:layout_marginBottom="12dp"/>
+
+        <EditText
+            android:id="@+id/etRegPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Password (min 6 characters)"
+            android:inputType="textPassword"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp"/>
+
+        <Button
+            android:id="@+id/btnRegister"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textSize="16sp"
+            android:backgroundTint="#C62828"
+            android:textColor="#FFFFFF"
+            android:padding="12dp"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/tvGoToLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Already have an account? Login here"
+            android:textColor="#C62828"
+            android:textSize="14sp"
+            android:padding="8dp"/>
+    </LinearLayout>
+</ScrollView>
