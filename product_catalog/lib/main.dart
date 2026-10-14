@@ -49,7 +49,7 @@ const List<Product> mockProducts = [
     id: '1',
     title: 'Noise Cancelling Headphones',
     category: 'Electronics',
-    price: 199.99,
+    price: 4999.00,
     rating: 4.8,
     icon: Icons.headphones,
   ),
@@ -57,7 +57,7 @@ const List<Product> mockProducts = [
     id: '2',
     title: 'Mechanical Gaming Keyboard',
     category: 'Electronics',
-    price: 89.99,
+    price: 2499.00,
     rating: 4.6,
     icon: Icons.keyboard,
   ),
@@ -65,7 +65,7 @@ const List<Product> mockProducts = [
     id: '3',
     title: 'Ergonomic Office Chair',
     category: 'Furniture',
-    price: 249.50,
+    price: 8999.00,
     rating: 4.7,
     icon: Icons.chair,
   ),
@@ -73,7 +73,7 @@ const List<Product> mockProducts = [
     id: '4',
     title: 'Smart Fitness Watch',
     category: 'Electronics',
-    price: 129.00,
+    price: 3299.00,
     rating: 4.5,
     icon: Icons.watch,
   ),
@@ -81,7 +81,7 @@ const List<Product> mockProducts = [
     id: '5',
     title: 'Ceramic Pour-Over Dripper',
     category: 'Home & Kitchen',
-    price: 24.95,
+    price: 899.00,
     rating: 4.9,
     icon: Icons.coffee,
   ),
@@ -89,7 +89,7 @@ const List<Product> mockProducts = [
     id: '6',
     title: 'Stainless Steel Water Bottle',
     category: 'Sports',
-    price: 18.50,
+    price: 549.00,
     rating: 4.4,
     icon: Icons.water_drop,
   ),
@@ -97,7 +97,7 @@ const List<Product> mockProducts = [
     id: '7',
     title: '4K Ultra HD Action Camera',
     category: 'Electronics',
-    price: 299.99,
+    price: 12499.00,
     rating: 4.6,
     icon: Icons.camera_alt,
   ),
@@ -105,7 +105,7 @@ const List<Product> mockProducts = [
     id: '8',
     title: 'Running Sneakers Pro',
     category: 'Sports',
-    price: 110.00,
+    price: 2999.00,
     rating: 4.3,
     icon: Icons.directions_run,
   ),
@@ -121,7 +121,10 @@ class CatalogDashboardScreen extends StatefulWidget {
 
 class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
   String _selectedCategory = 'All';
-  bool? _forceGridView; // null = auto-adapt by screen width, true/false = manual toggle
+  bool? _forceGridView;
+
+  // Cart state: maps Product to its selected quantity
+  final Map<Product, int> _cart = {};
 
   final List<String> _categories = [
     'All',
@@ -131,11 +134,208 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
     'Sports',
   ];
 
+  int get _cartItemCount {
+    int total = 0;
+    _cart.forEach((_, qty) => total += qty);
+    return total;
+  }
+
+  double get _cartTotalAmount {
+    double total = 0.0;
+    _cart.forEach((product, qty) => total += product.price * qty);
+    return total;
+  }
+
   List<Product> get _filteredProducts {
     if (_selectedCategory == 'All') return mockProducts;
     return mockProducts
         .where((item) => item.category == _selectedCategory)
         .toList();
+  }
+
+  void _addToCart(Product product) {
+    setState(() {
+      _cart[product] = (_cart[product] ?? 0) + 1;
+    });
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${product.title} added to cart'),
+        duration: const Duration(seconds: 1),
+      ),
+    );
+  }
+
+  void _removeFromCart(Product product) {
+    setState(() {
+      if (_cart.containsKey(product)) {
+        if (_cart[product]! > 1) {
+          _cart[product] = _cart[product]! - 1;
+        } else {
+          _cart.remove(product);
+        }
+      }
+    });
+  }
+
+  void _showCartSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setSheetState) {
+            return Container(
+              height: MediaQuery.of(context).size.height * 0.7,
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Your Cart',
+                        style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close),
+                        onPressed: () => Navigator.pop(context),
+                      ),
+                    ],
+                  ),
+                  const Divider(),
+                  Expanded(
+                    child: _cart.isEmpty
+                        ? const Center(
+                      child: Text(
+                        'Your cart is empty',
+                        style: TextStyle(color: Colors.grey, fontSize: 16),
+                      ),
+                    )
+                        : ListView.separated(
+                      itemCount: _cart.length,
+                      separatorBuilder: (_, __) => const Divider(height: 1),
+                      itemBuilder: (context, index) {
+                        final product = _cart.keys.elementAt(index);
+                        final quantity = _cart[product]!;
+                        final subtotal = product.price * quantity;
+
+                        return ListTile(
+                          leading: CircleAvatar(
+                            backgroundColor: Theme.of(context)
+                                .colorScheme
+                                .primaryContainer,
+                            child: Icon(
+                              product.icon,
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .primary,
+                            ),
+                          ),
+                          title: Text(
+                            product.title,
+                            style: const TextStyle(fontWeight: FontWeight.w600),
+                          ),
+                          subtitle: Text('₹${product.price.toStringAsFixed(0)} each'),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.remove_circle_outline),
+                                onPressed: () {
+                                  _removeFromCart(product);
+                                  setSheetState(() {});
+                                },
+                              ),
+                              Text(
+                                '$quantity',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.add_circle_outline),
+                                onPressed: () {
+                                  _addToCart(product);
+                                  setSheetState(() {});
+                                },
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                '₹${subtotal.toStringAsFixed(0)}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  if (_cart.isNotEmpty) ...[
+                    const Divider(),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Total Amount',
+                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          '₹${_cartTotalAmount.toStringAsFixed(0)}',
+                          style: const TextStyle(
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.green,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 48,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.deepPurple,
+                          foregroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        onPressed: () {
+                          Navigator.pop(context);
+                          setState(() {
+                            _cart.clear();
+                          });
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Order placed successfully!'),
+                              backgroundColor: Colors.green,
+                            ),
+                          );
+                        },
+                        child: const Text('Proceed to Checkout', style: TextStyle(fontSize: 16)),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void _showProductDetails(Product product) {
@@ -181,7 +381,7 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '\$${product.price.toStringAsFixed(2)}',
+                    '₹${product.price.toStringAsFixed(0)}',
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
@@ -207,9 +407,7 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
                 child: ElevatedButton.icon(
                   onPressed: () {
                     Navigator.pop(context);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('${product.title} added to cart!')),
-                    );
+                    _addToCart(product);
                   },
                   icon: const Icon(Icons.shopping_bag_outlined),
                   label: const Text('Add to Cart'),
@@ -229,6 +427,7 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
         title: const Text('Product Catalog'),
         elevation: 1,
         actions: [
+          // Toggle View Action
           IconButton(
             tooltip: 'Toggle Grid / List View',
             icon: Icon(
@@ -237,18 +436,30 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
             onPressed: () {
               setState(() {
                 if (_forceGridView == null) {
-                  _forceGridView = false; // switch from auto to list
+                  _forceGridView = false;
                 } else {
                   _forceGridView = !_forceGridView!;
                 }
               });
             },
           ),
+          // Cart Action with Badge
+          Badge(
+            isLabelVisible: _cartItemCount > 0,
+            label: Text('$_cartItemCount'),
+            alignment: const AlignmentDirectional(24, 4),
+            child: IconButton(
+              tooltip: 'View Cart',
+              icon: const Icon(Icons.shopping_cart),
+              onPressed: _showCartSheet,
+            ),
+          ),
+          const SizedBox(width: 8),
         ],
       ),
       body: Column(
         children: [
-          // 1. Horizontal ListView for Category Filter
+          // Category Filter Bar
           SizedBox(
             height: 60,
             child: ListView.builder(
@@ -274,14 +485,11 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
             ),
           ),
 
-          // 2. Adaptive Main Content (ListView or GridView based on layout)
+          // Main Responsive Area
           Expanded(
             child: LayoutBuilder(
               builder: (context, constraints) {
-                // Screen size breakpoint: 600px
                 final bool isTabletOrDesktop = constraints.maxWidth >= 600;
-
-                // Determine layout mode
                 final bool useGridView = _forceGridView ?? isTabletOrDesktop;
 
                 if (_filteredProducts.isEmpty) {
@@ -289,7 +497,6 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
                 }
 
                 if (useGridView) {
-                  // GridView Implementation
                   int crossAxisCount = 2;
                   if (constraints.maxWidth >= 1000) {
                     crossAxisCount = 4;
@@ -303,7 +510,7 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
                       crossAxisCount: crossAxisCount,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: 0.82,
+                      childAspectRatio: 0.8,
                     ),
                     itemCount: _filteredProducts.length,
                     itemBuilder: (context, index) {
@@ -312,7 +519,6 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
                     },
                   );
                 } else {
-                  // ListView Implementation
                   return ListView.builder(
                     padding: const EdgeInsets.all(12),
                     itemCount: _filteredProducts.length,
@@ -330,7 +536,6 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
     );
   }
 
-  // Card layout for ListView
   Widget _buildListTileCard(Product product) {
     return Card(
       elevation: 2,
@@ -354,16 +559,29 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
             Text(' ${product.rating}'),
           ],
         ),
-        trailing: Text(
-          '\$${product.price.toStringAsFixed(2)}',
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.green),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '₹${product.price.toStringAsFixed(0)}',
+              style: const TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 15,
+                color: Colors.green,
+              ),
+            ),
+            const SizedBox(width: 8),
+            IconButton(
+              icon: const Icon(Icons.add_shopping_cart, size: 20),
+              onPressed: () => _addToCart(product),
+            ),
+          ],
         ),
         onTap: () => _showProductDetails(product),
       ),
     );
   }
 
-  // Card layout for GridView
   Widget _buildGridCard(Product product) {
     return Card(
       elevation: 2,
@@ -381,31 +599,30 @@ class _CatalogDashboardScreenState extends State<CatalogDashboardScreen> {
                 backgroundColor: Theme.of(context).colorScheme.primaryContainer,
                 child: Icon(product.icon, size: 36, color: Theme.of(context).colorScheme.primary),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 10),
               Text(
                 product.title,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
               ),
               const Spacer(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    '\$${product.price.toStringAsFixed(2)}',
+                    '₹${product.price.toStringAsFixed(0)}',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 15,
+                      fontSize: 14,
                       color: Colors.green,
                     ),
                   ),
-                  Row(
-                    children: [
-                      const Icon(Icons.star, size: 14, color: Colors.amber),
-                      Text(' ${product.rating}', style: const TextStyle(fontSize: 12)),
-                    ],
+                  IconButton.filledTonal(
+                    visualDensity: VisualDensity.compact,
+                    icon: const Icon(Icons.add_shopping_cart, size: 18),
+                    onPressed: () => _addToCart(product),
                   ),
                 ],
               ),
