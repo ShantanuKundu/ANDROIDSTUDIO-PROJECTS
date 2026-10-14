@@ -14,11 +14,11 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_rakshalink_logo"
+        android:roundIcon="@drawable/ic_rakshalink_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
         android:theme="@style/Theme.RakshaLink"
+        android:supportsRtl="true"
         tools:targetApi="31">
 
         <!-- LoginActivity is the FIRST screen (LAUNCHER) -->

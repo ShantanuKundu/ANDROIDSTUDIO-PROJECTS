@@ -7,6 +7,15 @@
     android:gravity="center"
     android:background="#EDEDED">
 
+    <ImageView
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="12dp"
+        android:src="@drawable/ic_rakshalink_logo"
+        android:contentDescription="RakshaLink Logo" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
