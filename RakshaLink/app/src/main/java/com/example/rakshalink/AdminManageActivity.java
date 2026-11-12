@@ -1,24 +1,28 @@
 package com.example.rakshalink;
 
+import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
+import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class AdminManageActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_admin_manage);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
+
+        Button btnNavAdd = findViewById(R.id.btnNavAddHospital);
+        Button btnNavDelete = findViewById(R.id.btnNavDeleteHospital);
+
+        btnNavAdd.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminManageActivity.this, AdminAddHospitalActivity.class);
+            startActivity(intent);
+        });
+
+        btnNavDelete.setOnClickListener(v -> {
+            Intent intent = new Intent(AdminManageActivity.this, AdminDeleteHospitalActivity.class);
+            startActivity(intent);
         });
     }
 }

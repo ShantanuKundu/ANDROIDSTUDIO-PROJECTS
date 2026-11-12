@@ -48,6 +48,10 @@
             android:name=".AdminManageActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity android:name=".AdminAddHospitalActivity" android:exported="false" />
+        <activity android:name=".AdminDeleteHospitalActivity" android:exported="false" />
+
     </application>
 
 </manifest>
