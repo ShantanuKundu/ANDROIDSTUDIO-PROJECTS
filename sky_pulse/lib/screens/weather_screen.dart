@@ -44,12 +44,19 @@ class _WeatherScreenState extends State<WeatherScreen> {
     });
   }
 
-  Future<void> _saveAsDefault() async {
-    await _weatherService.saveDefaultLocation(_selectedState, _selectedCity);
+  Future<void> _saveInformationLocally(WeatherModel weather) async {
+    await _weatherService.saveLocalWeatherInfo(
+      weather,
+      _selectedState,
+      _selectedCity,
+    );
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Default location saved as $_selectedCity, $_selectedState'),
+          content: Text(
+            'Weather information for $_selectedCity, $_selectedState stored locally!',
+          ),
+          duration: const Duration(seconds: 2),
         ),
       );
     }
@@ -136,18 +143,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
       appBar: AppBar(
         title: const Text('SkyPulse Weather'),
         centerTitle: true,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.bookmark_add_outlined),
-            tooltip: 'Save as Default Location',
-            onPressed: _saveAsDefault,
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            tooltip: 'Refresh Weather',
-            onPressed: _fetchWeather,
-          ),
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -233,12 +228,6 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                   textAlign: TextAlign.center,
                                   style: const TextStyle(color: Colors.red),
                                 ),
-                                const SizedBox(height: 16),
-                                ElevatedButton.icon(
-                                  onPressed: _fetchWeather,
-                                  icon: const Icon(Icons.refresh),
-                                  label: const Text('Retry'),
-                                ),
                               ],
                             ),
                           );
@@ -293,6 +282,15 @@ class _WeatherScreenState extends State<WeatherScreen> {
                                           value: '${weather.windSpeed} km/h',
                                         ),
                                       ],
+                                    ),
+                                    const SizedBox(height: 24),
+                                    ElevatedButton.icon(
+                                      onPressed: () => _saveInformationLocally(weather),
+                                      icon: const Icon(Icons.save),
+                                      label: const Text('Store Information Locally'),
+                                      style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                                      ),
                                     ),
                                   ],
                                 ),

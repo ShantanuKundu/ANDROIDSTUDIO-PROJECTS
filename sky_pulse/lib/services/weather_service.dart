@@ -222,6 +222,17 @@ class WeatherService {
   }
 
 
+  // Save full weather information locally
+  Future<void> saveLocalWeatherInfo(
+      WeatherModel weather, String stateName, String cityName) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('saved_state', stateName);
+    await prefs.setString('saved_city', cityName);
+    await prefs.setDouble('saved_temperature', weather.temperature);
+    await prefs.setDouble('saved_wind_speed', weather.windSpeed);
+    await prefs.setInt('saved_weather_code', weather.weatherCode);
+  }
+
   // Save selected state and city locally
   Future<void> saveDefaultLocation(String stateName, String cityName) async {
     final prefs = await SharedPreferences.getInstance();
