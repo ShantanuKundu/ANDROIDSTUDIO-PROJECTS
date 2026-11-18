@@ -1,30 +1,32 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:college_info_app/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('College Info App loads Home screen and navigates properly',
+          (WidgetTester tester) async {
+        // Build our app and trigger a frame
+        await tester.pumpWidget(const CollegeInfoApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+        // Verify Home Screen loads with college title and navigation cards
+        expect(find.text('College Info Portal'), findsOneWidget);
+        expect(find.text('Courses'), findsOneWidget);
+        expect(find.text('Faculty'), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+        // Test Named-Route Navigation: Tap the 'Courses' card
+        await tester.tap(find.text('Courses'));
+        await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
-  });
+        // Verify navigation to Courses Screen
+        expect(find.text('Academic Courses'), findsOneWidget);
+        expect(find.text('Master of Computer Applications'), findsOneWidget);
+
+        // Test Direct Navigation: Tap on the MCA course item
+        await tester.tap(find.text('Master of Computer Applications'));
+        await tester.pumpAndSettle();
+
+        // Verify navigation to Detail Screen
+        expect(find.text('Duration'), findsOneWidget);
+        expect(find.text('2 Years (4 Semesters)'), findsOneWidget);
+      });
 }
