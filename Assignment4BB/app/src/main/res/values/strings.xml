@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Assignment-4B-B</string>
+    <string name="login_title">Account Access</string>
+    <string name="login_subtitle">Sign in or create a new account</string>
+    <string name="email_hint">Email Address</string>
+    <string name="password_hint">Password</string>
+    <string name="remember_me">Remember Me</string>
+    <string name="btn_sign_in">Sign In</string>
+    <string name="btn_register">Register</string>
+    <string name="home_title">Welcome!</string>
+    <string name="logged_in_as">Logged in as: %1$s</string>
+    <string name="remember_status">Remember Me Enabled: %1$s</string>
+    <string name="btn_logout">Logout</string>
+    <string name="err_empty_fields">Please enter both email and password</string>
+    <string name="err_no_user">No account found. Please register first.</string>
+    <string name="err_invalid_credentials">Invalid email or password</string>
+    <string name="msg_register_success">Registered successfully! You can now Sign In.</string>
+    <string name="msg_login_success">Sign In Successful!</string>
+</resources>
