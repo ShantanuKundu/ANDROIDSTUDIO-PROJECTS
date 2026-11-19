@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Assigntment-2</string>
+    <string name="calculator_title">Simple Calculator</string>
+    <string name="first_number_hint">Enter First Number</string>
+    <string name="second_number_hint">Enter Second Number</string>
+    <string name="add">+</string>
+    <string name="subtract">-</string>
+    <string name="multiply">×</string>
+    <string name="divide">÷</string>
+    <string name="clear">Clear</string>
+    <string name="result_placeholder">Result: </string>
+    <string name="error_empty_input">Please enter both numbers</string>
+    <string name="error_divide_by_zero">Cannot divide by zero!</string>
 </resources>
