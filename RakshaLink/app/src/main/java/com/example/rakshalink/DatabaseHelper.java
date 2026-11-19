@@ -165,22 +165,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public boolean addHospital(String name, String area, String phone, double lat, double lng, int hasIcu, double rating) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("name", name);
-        values.put("area", area);
-        values.put("phone", phone);
-        values.put("latitude", lat);
-        values.put("longitude", lng);
-        values.put("has_icu", hasIcu);
-        values.put("rating", rating);
+        values.put(COL_NAME, name);
+        values.put(COL_AREA, area);
+        values.put(COL_PHONE, phone);
+        values.put(COL_LAT, lat);
+        values.put(COL_LNG, lng);
+        values.put(COL_ICU, hasIcu);
+        values.put(COL_RATING, rating);
 
-        long result = db.insert("hospitals", null, values);
+        long result = db.insert(TABLE_HOSPITALS, null, values);
         return result != -1;
     }
 
     // Method to delete a hospital by its name
     public boolean deleteHospitalByName(String name) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted = db.delete("hospitals", "name = ?", new String[]{name});
+        int rowsDeleted = db.delete(TABLE_HOSPITALS, COL_NAME + " = ?", new String[]{name});
         return rowsDeleted > 0;
     }
 
